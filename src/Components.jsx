@@ -33,6 +33,9 @@ export const AppHome = React.createClass({
       <div className="container">
         <h1>Squbs</h1>
         <p>I'm the dummy home page, Find and update me in src/main.js#AppHome</p>
+        <Link to="/docs" query={{path: `${documentConfig.path}/${documentConfig.versions[0]}/README.md`}}>
+          Check the document of squbs
+        </Link>
       </div>
     );
   }
