@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server --devtool eval --progress --colors --hot --port 8888",
-    "watch": "webpack --progress --colors --watch"
+    "watch": "webpack --progress --colors --watch --optimize-minimize"
   },
   "author": "",
   "license": "ISC",
