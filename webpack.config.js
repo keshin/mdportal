@@ -3,7 +3,8 @@ var webpack = require("webpack");
 var node_modules = path.resolve(__dirname, 'node_modules');
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'src/main.js')
+    app: path.resolve(__dirname, 'src/main.js'),
+    vendor: ["jquery", "react", "react-dom", "react-router", "history", "bootstrap/dist/css/bootstrap.min.css", "urijs", "marked"]
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -28,5 +29,8 @@ module.exports = {
     { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file" },
     { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&mimetype=image/svg+xml" }
     ]
-  }
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js")
+  ]
 };
