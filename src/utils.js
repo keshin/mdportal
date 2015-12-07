@@ -19,8 +19,11 @@ function getRender(base) {
 
       if (isMd) {
         let hash = uri.fragment();
-
-        href = history.createHref("/docs", {path: uri.fragment("").toString(), hash: hash})
+        let query = {path: uri.fragment("").toString()};
+        if (hash) {
+          query.hash = hash;
+        }
+        href = history.createHref("/docs", query);
       } else {
         href = uri.toString();
       }

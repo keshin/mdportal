@@ -4,6 +4,8 @@ import ReactDOM from "react-dom"
 import {Link, History} from "react-router"
 import "bootstrap/dist/css/bootstrap.min.css"
 import util from "./utils"
+import $ from "jquery"
+import scrollTo from "jquery.scrollto"
 
 export const App = React.createClass({
   render() {
@@ -65,6 +67,14 @@ export const MdComponent = React.createClass({
   },
   componentWillReceiveProps(nextProps) {
     this.handleChange(nextProps.location);
+  },
+  componentDidUpdate() {
+    let hash = this.props.location.query.hash;
+    let target = 0; // top
+    if (hash) {
+      target = document.getElementById(hash) || 0;
+    }
+    $(window).scrollTo(target, 300);
   },
   switchVersion(e) {
     let version = e.target.value;

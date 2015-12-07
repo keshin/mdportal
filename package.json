@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
     "dev": "webpack-dev-server --devtool eval --progress --colors --hot --port 8888",
-    "watch": "webpack --progress --colors --watch --optimize-minimize"
+    "build": "webpack --progress --colors --optimize-minimize"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +26,7 @@
     "flux": "^2.1.1",
     "history": "^1.13.1",
     "jquery": "^2.1.4",
+    "jquery.scrollto": "^2.1.2",
     "marked": "0.3.3",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
