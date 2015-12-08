@@ -4,7 +4,17 @@ var node_modules = path.resolve(__dirname, 'node_modules');
 module.exports = {
   entry: {
     app: path.resolve(__dirname, 'src/main.js'),
-    vendor: ["jquery", "jquery.scrollto", "react", "react-dom", "react-router", "history", "bootstrap/dist/css/bootstrap.min.css", "urijs", "marked"]
+    vendor: ["jquery",
+      "jquery.scrollto",
+      "react",
+      "react-dom",
+      "react-router",
+      "history",
+      "bootstrap/dist/css/bootstrap.min.css",
+      "urijs",
+      "marked",
+      "highlight.js",
+      "highlight.js/styles/default.css"]
   },
   output: {
     path: path.resolve(__dirname, 'build'),

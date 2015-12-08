@@ -9,7 +9,7 @@ ReactDOM.render((
   <Router history={history}>
     <Route path="/" component={App} >
       <IndexRoute component={AppHome} />
-      <Route path="docs" component={MdComponent} />
+      <Route path="docs/**/*.md" component={MdComponent} />
     </Route>
   </Router>
 ), document.getElementById("app"));

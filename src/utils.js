@@ -1,8 +1,10 @@
 import marked from "marked"
 import $ from "jquery"
-import documentConfig from "document.config"
+import config from "./config"
 import URI from "urijs"
 import history from "./history"
+import highlight from "highlight.js"
+import "highlight.js/styles/default.css"
 
 function getRender(base) {
   let render = new marked.Renderer();
@@ -19,13 +21,11 @@ function getRender(base) {
 
       if (isMd) {
         let hash = uri.fragment();
-        let query = {path: uri.fragment("").toString()};
-        if (hash) {
-          query.hash = hash;
-        }
-        href = history.createHref("/docs", query);
+        let query = hash && {hash};
+        let path = uri.fragment("").path();
+        href = history.createHref(`/docs${path}`, query);
       } else {
-        href = uri.toString();
+        href = uri.absoluteTo(config.base).toString();
       }
     }
     return `<a href="${href}" ${title} ${others} >${text}</a>`;
@@ -42,17 +42,25 @@ let pathPattern = /\/?([^/]+)(.*)/;
 
 export default {
   getDocument(url) {
-    return $.get(url).then(text => {
-      return marked(text, {renderer: getRender(url), pedantic: true});
+    let base = `${config.rawBase}/${url}`;
+    return $.get(base).then(text => {
+      return marked(text, {renderer: getRender(base), highlight: (code, lang) => {
+        let detected = highlight.getLanguage(lang);
+        if (detected) {
+          return highlight.highlight(detected, code).value;
+        } else {
+          return code;
+        }
+      }});
     })
   },
   getDocMeta(url) {
-    if (url.startsWith(documentConfig.path)) {
-      let base = documentConfig.path;
-      let rest = url.replace(base, "");
+    if (url.startsWith(config.path)) {
+      let repo = config.repo;
+      let rest = url.replace(repo, "");
       let [, version, path] = pathPattern.exec(rest);
       return {
-        base, version, rest: path
+        repo, version, rest: path
       };
     } else {
       return {};

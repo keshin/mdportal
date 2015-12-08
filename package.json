@@ -24,6 +24,7 @@
   "dependencies": {
     "bootstrap": "^3.3.5",
     "flux": "^2.1.1",
+    "highlight.js": "^9.0.0",
     "history": "^1.13.1",
     "jquery": "^2.1.4",
     "jquery.scrollto": "^2.1.2",

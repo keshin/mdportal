@@ -1,4 +1,4 @@
-import documentConfig from "document.config"
+import config from "./config"
 import React from "react"
 import ReactDOM from "react-dom"
 import {Link, History} from "react-router"
@@ -13,11 +13,11 @@ export const App = React.createClass({
       <nav className="navbar navbar-inverse navbar-fixed-top">
         <div className="container-fluid">
           <div className="navbar-header">
-            <Link to="/" className="navbar-brand">{documentConfig.name} <small>{documentConfig.latestVersion}</small></Link>
+            <Link to="/" className="navbar-brand">{config.name} <small>{config.latestVersion}</small></Link>
           </div>
           <div className="collapse navbar-collapse">
             <ul className="nav navbar-nav navbar-right">
-              <li><Link to="/docs" query={{path: `${documentConfig.path}/${documentConfig.versions[0]}/README.md`}}>
+              <li><Link to={`/docs/${config.repo}/${config.versions[0]}/README.md`}>
                 <span className="glyphicon glyphicon-menu-hamburger"></span>
                 Document</Link></li>
             </ul>
@@ -35,7 +35,7 @@ export const AppHome = React.createClass({
       <div className="container">
         <h1>Squbs</h1>
         <p>I'm the dummy home page, Find and update me in src/main.js#AppHome</p>
-        <Link to="/docs" query={{path: `${documentConfig.path}/${documentConfig.versions[0]}/README.md`}}>
+        <Link to={`/docs/${config.repo}/${config.versions[0]}/README.md`}>
           Check the document of squbs
         </Link>
       </div>
@@ -47,26 +47,28 @@ export const AppHome = React.createClass({
 export const MdComponent = React.createClass({
   mixins: [History],
   getInitialState() {
-    return {doc: "", version: "", base: documentConfig.path, rest: ""}
+    return {doc: "", version: "", repo: config.repo, rest: ""}
   },
-  handleChange(location) {
-    let path = location.query && location.query.path;
+  handleChange(props) {
+    let path = props.params.splat.join("/") + ".md";
     if (path) {
       util.getDocument(path).done(doc => {
         if (this.isMounted()) {
-          let {version, base, rest} = util.getDocMeta(path);
-          this.setState({doc, version, base, rest});
+          let {version, repo, rest} = util.getDocMeta(path);
+          this.setState({doc, version, repo, rest});
         }
+      }).progress(progress => {
+        console.log(progress);
       });
     } else {
       this.history.push("/");
     }
   },
   componentDidMount() {
-    this.handleChange(this.props.location);
+    this.handleChange(this.props);
   },
   componentWillReceiveProps(nextProps) {
-    this.handleChange(nextProps.location);
+    this.handleChange(nextProps);
   },
   componentDidUpdate() {
     let hash = this.props.location.query.hash;
@@ -79,16 +81,19 @@ export const MdComponent = React.createClass({
   switchVersion(e) {
     let version = e.target.value;
     if (version !== this.state.version) {
-      let {base, rest} = this.state;
-      this.history.pushState(null, "/docs", {path: `${base}/${version}${rest}`});
+      let {repo, rest} = this.state;
+      this.history.pushState(null, `/docs/${repo}/${version}${rest}`);
     }
   },
   render() {
     return (<div className="container" >
       <div className="row">
-        <div className="col-lg-3 pull-right">
+        <div className="col-lg-9">
+
+        </div>
+        <div className="col-lg-3">
           <select onChange={this.switchVersion} value={this.state.version}>{
-            documentConfig.versions.map(version => {
+            config.versions.map(version => {
               return (
                 <option key={version} value={version}>{version}</option>
               );
